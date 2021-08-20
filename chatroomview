@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 // import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:full_screen_image/full_screen_image.dart';
+// import 'package:full_screen_image/full_screen_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 // @dart=2.9
 
@@ -124,8 +124,31 @@ class _ChatRoomViewState extends State<ChatRoomView>
     });
     return Scaffold(
         key: scaffoldKey,
-        appBar: AppBar(
-          title: chatRoomName != null ? Text(chatRoomName) : Text("Loading..."),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(40.0),
+            child:
+            AppBar(
+                elevation: 0,
+                // leading: IconButton(
+                //   icon: Image.asset("images/이전@4x.png", scale: 4),
+                //   onPressed: () {
+                //     Navigator.push(
+                //         context,
+                //         PageRouteBuilder(
+                //           pageBuilder: (context, animation1, animation2) => SignIn(),
+                //           transitionDuration: Duration(seconds: 0),
+                //         )
+                //     );
+                //   },
+                // ),
+                backgroundColor: const Color(0xff6990FF),
+                centerTitle: true,
+                title: chatRoomName != null ? Text(chatRoomName, style: TextStyle(
+                  fontFamily: 'avenir',
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),) : Text("Loading..."),
+            ),
         ),
         body: Stack(
           children: <Widget>[
@@ -137,10 +160,11 @@ class _ChatRoomViewState extends State<ChatRoomView>
                   child: Text(
                     "Send the first message",
                     style: TextStyle(
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .color),
+                        // color: Theme.of(context)
+                        //     .textTheme
+                        //     .bodyText1!
+                        //     .color
+                    ),
                   ),
                 )
                     : Container()
@@ -172,10 +196,11 @@ class _ChatRoomViewState extends State<ChatRoomView>
                                 child: Text(
                                   "여기까지 읽었습니다",
                                   style: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1!
-                                          .color),
+                                      // color: Theme.of(context)
+                                      //     .textTheme
+                                      //     .bodyText1!
+                                      //     .color
+                                  ),
                                 ),
                               ),
                             ],
@@ -190,62 +215,110 @@ class _ChatRoomViewState extends State<ChatRoomView>
             ),
             Align(
               alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: EdgeInsets.all(2.0),
-                child: TextField(
-                  style: TextStyle(fontSize: 15),
-                  focusNode: _focusNode,
-                  controller: _messageController,
-                  minLines: 1,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Theme.of(context).backgroundColor,
-                      border: OutlineInputBorder(),
-                      hintText: 'Write a message',
-                      hintStyle: TextStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .color!
-                              .withOpacity(0.30)),
-                      suffixIcon: _messageController.text.isNotEmpty
-                          ? IconButton(
-                        icon: Icon(
-                          Icons.send_rounded,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            String temp = _messageController.text;
-                            _messageController.clear();
-                            _saveMessage(false, temp);
-                            _shouldScroll = true;
-                          });
-                        },
-                      )
-                          : IconButton(
-                          icon: Icon(Icons.camera_alt),
-                          onPressed: () {
-                            _showChoiceDialog(context);
-                          })),
+              child: SafeArea(
+                child: Container(    // 메시지 입력, 보내기 버튼 감싼 컨테이너
+                  margin: EdgeInsets.symmetric(horizontal: 13.0),
+                  decoration: BoxDecoration(
+                    color: const Color(0xf7eeeeee),
+                    borderRadius: BorderRadius.circular(15.0)),
+                  padding: EdgeInsets.only(left:16, right:5, top:4, bottom:1),
+                  child: Row(
+                  children: [
+                  Expanded(
+                  child: TextField(   // 메시지 입력필드
+                  controller:  _messageController,
+                    minLines: 1,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintText: '메세지 입력',
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(   // 전송 버튼
+                          icon: Icon(Icons.send_rounded, color: Colors.grey,),
+                          onPressed: () {_handleSubmitted('100', _messageController.text, Timestamp.now());}
+                      ),
+                      ),
+                  ),
+                  // child: TextField(
+                  //   style: TextStyle(fontSize: 15),
+                  //   focusNode: _focusNode,
+                  //   controller: _messageController,
+                  //   minLines: 1,
+                  //   maxLines: 3,
+                  //   decoration: InputDecoration(
+                  //       border: InputBorder.none,
+                  //       filled: true,
+                  //       fillColor: const Color(0xf7eeeeee),
+                  //       hintText: 'Write a message',
+                  //       hintStyle: TextStyle(
+                  //           color: Theme.of(context)
+                  //               .textTheme
+                  //               .bodyText1!
+                  //               .color!
+                  //               .withOpacity(0.30)),
+                  //       suffixIcon: _messageController.text.isNotEmpty
+                  //           ? IconButton(
+                  //         icon: Icon(
+                  //           Icons.send_rounded,
+                  //         ),
+                  //         onPressed: () {
+                  //           setState(() {
+                  //             String temp = _messageController.text;
+                  //             _messageController.clear();
+                  //             _saveMessage(false, temp);
+                  //             _shouldScroll = true;
+                  //           });
+                  //         },
+                  //       )
+                  //           : IconButton(
+                  //           icon: Icon(Icons.camera_alt),
+                  //           onPressed: () {
+                  //             _showChoiceDialog(context);
+                  //           })),
+                  // ),
                 ),
+               ],
               ),
-            ),
+              ),
+             )
+            )
           ],
         ));
+  }
+
+  void _handleSubmitted(String sender, String text, Timestamp stamp) {
+    _scrollToBottom();    // 메시지 전송 버튼 누르면 가장 아래로 스크롤 -> 메시지 없어도 작동
+    if (text.trim() != '') {    // 메시지 있는가 판단
+      _messageController.clear();
+
+      // TODO: .collection() 안에 room1 -> room ID 받아오도록.
+      var documentReference = FirebaseFirestore.instance
+          .collection('Chatroom/room1/messages')
+          .doc();
+
+      FirebaseFirestore.instance.runTransaction((transaction) async => {
+        transaction.set(
+          documentReference,
+          {
+            'sender': sender,
+            'text': text,
+            'time': stamp,
+          },
+        )
+      });
+    }
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+    }
   }
 
   Widget chatMessageItem(BuildContext context, DocumentSnapshot document) {
     bool isSender = document['sender'] == "IoWY4yaZWSTCRpSqQUKpx8SzMfs1";
     Timestamp tt = document["date"];
-    DateTime dateTime =
-    DateTime.fromMicrosecondsSinceEpoch(tt.microsecondsSinceEpoch);
     String date = "";
-    if (DateTime.now().difference(dateTime) <= new Duration(hours: 24)) {
-      date = DateFormat.Hm().format(dateTime);
-    } else {
-      date = DateFormat.Md().add_Hm().format(dateTime);
-    }
+    date = DateFormat('kk:mma').format(tt.toDate()).toString();
     return Container(
       padding: EdgeInsets.all(8),
       child: FractionallySizedBox(
@@ -254,14 +327,18 @@ class _ChatRoomViewState extends State<ChatRoomView>
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              document["isRead"]==false
+                  ? SizedBox(width:15, child: Text("1", style: TextStyle(fontSize: 12, color: const Color(0xffff8c8c)),))
+                  : Text(""),
               Text(
                 date,
                 style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context)
-                        .accentTextTheme
-                        .bodyText1!
-                        .color),
+                  color: Colors.grey, fontSize: 13.5
+                    // color: Theme.of(context)
+                    //     .accentTextTheme
+                    //     .bodyText1!
+                    //     .color
+                ),
               ),
               messagebody(document["type"], document["content"], isSender,
                   context)
@@ -276,11 +353,12 @@ class _ChatRoomViewState extends State<ChatRoomView>
               Text(
                 date,
                 style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context)
-                        .accentTextTheme
-                        .bodyText1!
-                        .color),
+                    color: Colors.grey, fontSize: 13.5
+                    // color: Theme.of(context)
+                    //     .accentTextTheme
+                    //     .bodyText1!
+                    //     .color
+                ),
               ),
             ],
           )),
@@ -296,38 +374,39 @@ class _ChatRoomViewState extends State<ChatRoomView>
           child: Container(
             width: MediaQuery.of(context).size.width * 0.7,
             height: MediaQuery.of(context).size.width * 0.8,
-            child: FullScreenWidget(
-                child: Hero(
-                    tag: content,
-                    child: CachedNetworkImage(
-                        placeholder: (context, url) => Container(
-                          child: Center(
-                            child: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                          color: Theme.of(context).backgroundColor,
-                        ),
-                        imageUrl: content,
-                        fit: BoxFit.cover))),
+            // child: FullScreenWidget(
+            //     child: Hero(
+            //         tag: content,
+            //         child: CachedNetworkImage(
+            //             placeholder: (context, url) => Container(
+            //               child: Center(
+            //                 child: SizedBox(
+            //                   width: 20,
+            //                   height: 20,
+            //                   child: CircularProgressIndicator(),
+            //                 ),
+            //               ),
+            //               color: Theme.of(context).backgroundColor,
+            //             ),
+            //             imageUrl: content,
+            //             fit: BoxFit.cover))),
           ))
           : Card(
+        elevation: 0,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(15,10,15,10),
           child: ConstrainedBox(
             constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width * 0.7),
             child: Text(
               content,
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 15),
             ),
           ),
         ),
         color: isSender
-            ? Theme.of(context).cardColor
-            : Theme.of(context).textSelectionColor,
+            ? const Color(0xffcedaff)
+            : const Color(0xf7eeeeee),
       ),
     );
   }
@@ -337,14 +416,11 @@ class _ChatRoomViewState extends State<ChatRoomView>
   Future getInitialChatInfo() async {
     tokens = chatRoomID.split('/');
     receiverID = tokens[1];
-    if (tokens[2] == "anonymous") {
-      chatRoomName = "익명";
-    } else if (tokens.length == 3) {
+    if (tokens.length == 3) {
       String senderID = "IoWY4yaZWSTCRpSqQUKpx8SzMfs1";
       QuerySnapshot docSnapshots = await db
           .collection('chatroom')
           .where('participants', arrayContains: senderID)
-          .where('isAnonymous', isEqualTo: false)
           .get();
           // .getDocuments();
       if (docSnapshots.docs.isNotEmpty) {
@@ -361,7 +437,8 @@ class _ChatRoomViewState extends State<ChatRoomView>
           }
         }
       }
-      chatRoomName = await _getReceiverNick(receiverID);
+      // chatRoomName = await _getReceiverNick(receiverID);
+      chatRoomName = tokens[1];
     } else {
       chatRoomName = "에러가 발생했습니다. 재시도해주세요.";
     }
@@ -751,7 +828,7 @@ class _ChatRoomViewState extends State<ChatRoomView>
           await transaction.update(chatroomRef, {
             'lastDate': _now,
             'lastMessage': isImage ? '<Photo>' : content,
-            'unreadCount.$receiverID': fresh['unreadCount'][receiverID] + 1,
+            'unreadCount.$receiverID': fresh['unreadCount'][receiverID], //+ 1,
           });
           db
               .collection('user')
