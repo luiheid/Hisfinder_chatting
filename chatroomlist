@@ -96,21 +96,21 @@ class _ChatRoomListState extends State<ChatRoomList> {
                 }),
           ),
         ),
-        RaisedButton(
-            color: const Color(0xff6990FF),
-            child: Text('Chatting'), textColor: Colors.white,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                String chatRoomID =
-                    // "chatInit/${widget.writerUID}/${widget.boardType}";
-                  "chatInit/daily/IoWY4yaZWSTCRpSqQUKpx8SzMfs1";
-                return ChatRoomView(
-                  chatRoomID: chatRoomID,
-                  chatRoomName: "",
-                );
-              }));
-            }
-        )
+        // RaisedButton(
+        //     color: const Color(0xff6990FF),
+        //     child: Text('Chatting'), textColor: Colors.white,
+        //     onPressed: () {
+        //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //         String chatRoomID =
+        //             // "chatInit/${widget.writerUID}/${widget.boardType}";
+        //           "chatInit/bi/IoWY4yaZWSTCRpSqQUKpx8SzMfs1";
+        //         return ChatRoomView(
+        //           chatRoomID: chatRoomID,
+        //           chatRoomName: "",
+        //         );
+        //       }));
+        //     }
+        // )
       ],
     );
   }
